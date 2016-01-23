@@ -1,0 +1,9 @@
+inherit_from: .rubocop_todo.yml
+AllCops:
+  TargetRubyVersion: 2.3
+Metrics/LineLength:
+  Enabled: false
+Style/FileName:
+  Enabled: false
+Style/Documentation:
+  Enabled: false

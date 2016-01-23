@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require 'bundle-only/messages'
+
+install_only = ARGV.to_a.map(&:to_sym)
+
+if install_only.empty?
+  name = File.basename($PROGRAM_NAME)
+  STDERR.puts "Usage: #{name} group [group [...]]"
+  exit 2
+end
+
+ENV['BUNDLE_IGNORE_CONFIG'] = 'true'
+require 'bundler'
+
+Bundler.configure
+
+gemfile = Pathname.new(Bundler.default_gemfile).expand_path
+builder = Bundler::Dsl.new
+builder.eval_gemfile(gemfile)
+
+all_groups = builder.dependencies.map(&:groups).flatten.uniq
+groups_to_skip = all_groups - install_only
+Bundler.settings.without = groups_to_skip
+Bundler.settings.with = install_only
+
+definition = builder.to_definition(Bundler.default_lockfile, {})
+def definition.lock(*); end # never lock or preserve options
+definition.validate_ruby!
+
+Bundler.ui = Bundler::UI::Shell.new
+
+Bundler::Installer.install(Bundler.root, definition, system: true)
+
+BundleOnly::Messages.print_installation_complete(definition)
+BundleOnly::Messages.confirm_without_groups
+
+Bundler::Installer.post_install_messages.each do |name, message|
+  BundleOnly::Messages.print_post_install_message(name, message)
+end
