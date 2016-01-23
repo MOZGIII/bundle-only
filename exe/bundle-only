@@ -5,8 +5,8 @@ require 'bundle-only/messages'
 install_only = ARGV.to_a.map(&:to_sym)
 
 if install_only.empty?
-  name = File.basename($PROGRAM_NAME)
-  STDERR.puts "Usage: #{name} group [group [...]]"
+  exename = File.basename($PROGRAM_NAME)
+  STDERR.puts "Usage: #{exename} group [group [...]]"
   exit 2
 end
 
