@@ -30,11 +30,11 @@ definition.validate_ruby!
 
 Bundler.ui = Bundler::UI::Shell.new
 
-Bundler::Installer.install(Bundler.root, definition, system: true)
+installer = Bundler::Installer.install(Bundler.root, definition, system: true)
 
 BundleOnly::Messages.print_installation_complete(definition)
 BundleOnly::Messages.confirm_without_groups
 
-Bundler::Installer.post_install_messages.each do |name, message|
+installer.post_install_messages.each do |name, message|
   BundleOnly::Messages.print_post_install_message(name, message)
 end
