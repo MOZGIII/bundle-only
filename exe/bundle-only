@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # Exit cleanly from an early interrupt
-Signal.trap("INT") do
+Signal.trap('INT') do
   Bundler.ui.debug("\n#{caller.join("\n")}") if defined?(Bundler)
   exit 1
 end
@@ -38,7 +38,6 @@ definition.validate_ruby!
 Bundler.ui = Bundler::UI::Shell.new
 
 installer = Bundler::Installer.install(Bundler.root, definition, system: true)
-
 
 BundleOnly::Messages::Install.output_installation_complete_message(definition)
 BundleOnly::Messages::Common.output_without_groups_message(:install)
