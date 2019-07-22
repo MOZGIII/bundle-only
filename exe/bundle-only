@@ -39,9 +39,7 @@ Bundler.ui = Bundler::UI::Shell.new
 
 installer = Bundler::Installer.install(Bundler.root, definition, system: true)
 
-BundleOnly::Messages.print_installation_complete(definition)
-BundleOnly::Messages.confirm_without_groups
 
-installer.post_install_messages.each do |name, message|
-  BundleOnly::Messages.print_post_install_message(name, message)
-end
+BundleOnly::Messages::Install.output_installation_complete_message(definition)
+BundleOnly::Messages::Common.output_without_groups_message(:install)
+BundleOnly::Messages::Common.output_post_install_messages installer.post_install_messages
