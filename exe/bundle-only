@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Exit cleanly from an early interrupt
+Signal.trap("INT") do
+  Bundler.ui.debug("\n#{caller.join("\n")}") if defined?(Bundler)
+  exit 1
+end
+
 require 'bundle-only/messages'
 
 install_only = ARGV.to_a.map(&:to_sym)
